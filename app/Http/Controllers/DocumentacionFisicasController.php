@@ -14,15 +14,25 @@ class DocumentacionFisicasController extends Controller
     }
 
     public function store(Request $request) {
-        $contenido = [
-            'name'=>$request->name,
-            'content'=>$request->content,
-            'file'=>$request->file('file'),
-            'content2'=>$request->content2,
-            'file2'=>$request->file('file2')
-        ];
-        $correo = new PersonaFisica($contenido);
-        Mail::to('gaston.estevez7@gmail.com')->send($correo);
+        try {
+            // throw new \Exception('Error Processing Request', 1);
+            $contenido = [
+                'name'=> $request->nombre,
+                'cuit' => $request->cuit,
+                'dniFrenteDorso'=>$request->file('dniFrenteDorso'),
+                'constanciaOrigenDeFondos'=>$request->file('constanciaOrigenDeFondos'),
+            ];
+            $correo = new PersonaFisica($contenido);
+            Mail::to('gaston.estevez7@gmail.com')->send($correo);
+            return response()->json([
+                'message' => 'Successfully access to api!',
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'message' => $th->getMessage()
+            ], 500);
+        }
+
         return 'mail enviado';
     }
 }

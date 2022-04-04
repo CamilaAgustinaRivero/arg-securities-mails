@@ -32,11 +32,11 @@ class PersonaFisica extends Mailable
     public function build()
     {
         return $this->view('emails.personaFisica')
-        ->attach($this->contenido['file']->getRealPath(), [
-            'as'=>$this->contenido['file']->getClientOriginalName()
+        ->attach($this->contenido['dniFrenteDorso']->getRealPath(), [
+            'as'=>$this->contenido['dniFrenteDorso']->getClientOriginalName()
         ])
-        ->attach($this->contenido['file2']->getRealPath(), [
-            'as'=>$this->contenido['file2']->getClientOriginalName()
+        ->attach($this->contenido['constanciaOrigenDeFondos']->getRealPath(), [
+            'as'=>$this->contenido['constanciaOrigenDeFondos']->getClientOriginalName()
         ]);;
     }
 }

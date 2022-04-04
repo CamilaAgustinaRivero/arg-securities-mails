@@ -8,9 +8,8 @@
 </head>
 <body>
     <p>
-        Nombre: {{$contenido['name']}}
-        Archivo: {{$contenido['content']}}
-        Archivo: {{$contenido['content2']}}
+        Se adjuntan datos de {{$contenido['name']}} con CUIT: {{$contenido['cuit']}}.
+        {{-- Archivo: {{$contenido['content2']}} --}}
     </p>
 </body>
 </html>
