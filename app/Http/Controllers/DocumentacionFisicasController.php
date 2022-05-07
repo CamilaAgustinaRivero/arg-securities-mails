@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\PersonaFisica;
 use App\Mail\PersonaJuridica;
-
+use App\Mail\RegisterSuccess;
 
 class DocumentacionFisicasController extends Controller
 {
@@ -30,7 +30,9 @@ class DocumentacionFisicasController extends Controller
             $correo = new PersonaFisica($contenido);
             Mail::to($request->email)->send($correo);
         }
-        Mail::to($request->email)->send($correo);
+        $register = new RegisterSuccess($contenido);
+        Mail::to($request->email)->send($register);
+
     }
 
     public function store(Request $request)
