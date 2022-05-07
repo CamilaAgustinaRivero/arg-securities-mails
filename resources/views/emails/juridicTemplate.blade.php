@@ -53,11 +53,28 @@
             Por favor, le solicitamos tenga a bien responder este correo electrónico con la siguiente documentación:
         </p>
         <br>
+        <p>
+            <strong>De la empresa:</strong>
+        </p>
         <div>
             <ul>
-                <li>- DNI (copia de frente y dorso)</li> <br>
-                <li>- Constancia de CBU de la/las cuentas bancarias desde donde enviará o recibirá dinero (debe coincidir con la/las indicadas en el formulario).</li> <br>
-                <li>- Documentación que justifique los fondos (Por ejemplo: 3 últimos Recibos de Sueldo ó 3 últimos pagos de monotributo o autónomos y sus respectivas DDJJ de IVA ó Facturas emitidas ó DDJJ de Ganancias + Ticket de Presentación ó DDJJ Bienes Personales + Ticket de Presentación ó Certificación Contable de Ingresos o Fondos con su respectiva Oblea del Consejo Profesional de Ciencias Económicas).</li> <br>
+                <li>✔ Estatuto y todas sus modificaciones </li>
+                <li>✔ Último balance con copia de la Oblea del Consejo Profesional de Cs. Económicas</li>
+                <li>✔ Acta firmada con aprobación del último balance.</li>
+                <li>✔ Última Acta firmada con designación de Autoridades con copia de la Rúbrica del Libro de Actas.</li>
+                <li>✔ Registro de accionistas junto con la copia de la Rúbrica del Libro. De la documentación fehaciente solicitada en el presente ítem deben surgir los beneficiarios finales de la Persona Jurídica</li>
+                <li>✔ Constancia de CBU</li>
+                <li>✔ En caso que corresponda: Constancia de inscripción como Sujeto Obligado ante la Unidad de Información Financiera </li>
+            </ul>
+        </div>
+        <br>
+        <p>
+            <strong>De los Apoderados y/o Autorizados:</strong>
+        </p>
+        <div>
+            <ul>
+                <li>✔ Copia del DNI</li>
+                <li>✔ En caso que corresponda: Copia de los poderes</li>
             </ul>
         </div>
         <br>
