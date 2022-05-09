@@ -23,15 +23,14 @@ class DocumentacionFisicasController extends Controller
             'email' => $request->email,
         ];
 
-        if (isset($request->isPersonaJuridica)) {
+        if ($request->isPersonaJuridica) {
             $correo = new PersonaJuridica($contenido);
-            Mail::to($request->email)->send($correo);
         } else {
             $correo = new PersonaFisica($contenido);
-            Mail::to($request->email)->send($correo);
         }
-        $register = new RegisterSuccess($contenido);
-        Mail::to($request->email)->send($register);
+        Mail::to($request->email)->send($correo);
+        $register = new RegisterSuccess($request->all());
+        Mail::to("gaston.estevez7@gmail.com")->send($register);
 
     }
 
@@ -42,10 +41,12 @@ class DocumentacionFisicasController extends Controller
             $this->sendClientTemplate($request);
             return response()->json([
                 'message' => 'Successfully sent emails!',
-            ], 200);
+            ]);
         } catch (\Throwable $th) {
+
             return response()->json([
-                'message' => $th->getMessage()
+                'message' => $th->getMessage(),
+                'object' => $th->getLine(),
             ], 500);
         }
 
