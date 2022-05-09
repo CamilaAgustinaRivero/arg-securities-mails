@@ -14,6 +14,6 @@ use App\Http\Controllers\DocumentacionFisicasController;
 |
 */
 
-Route::get('/personaFisica', [DocumentacionFisicasController::class, 'preview'])->name('documentacion-fisicas.preview');
-Route::post('/personaFisica', [DocumentacionFisicasController::class, 'store'])->name('documentacion-fisicas.store');
+//Route::get('/personaFisica', [DocumentacionFisicasController::class, 'preview'])->name('documentacion-fisicas.preview');
+//Route::post('/personaFisica', [DocumentacionFisicasController::class, 'store'])->name('documentacion-fisicas.store');
 
