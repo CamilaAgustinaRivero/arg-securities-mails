@@ -98,7 +98,7 @@ class RegisterSuccess extends Mailable
     public function store($info): Fpdi
     {
         $pdf = new Fpdi();
-        $pdf->setSourceFile('../public/PDFs/PF-Plantilla.pdf');
+        $pdf->setSourceFile(base_path() . '/public/PDFs/PF-Plantilla.pdf');
         $pdf->SetFont('Arial', '', '8');
 
         # Página 1
