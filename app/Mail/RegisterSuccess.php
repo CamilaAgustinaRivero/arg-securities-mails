@@ -302,24 +302,24 @@ class RegisterSuccess extends Mailable
         $pdf->SetXY(45, 167);
         $pdf->Write(50, $info["titular"]["datosPrincipalesFisicas"]["apellido"].' '.$info["titular"]["datosPrincipalesFisicas"]["nombre"]);
         # Si / No
-        if ($info["titular"]["declaracionesPF"]["expuestaPoliticamente"]) {
+        if ($info["personaRelacionada"] && $info["personaRelacionada"][0] && $info["personaRelacionada"][0]["persona"]["declaracionesPF"]["expuestaPoliticamente"]) {
             $pdf->SetXY(73, 170);
             $pdf->Write(50, "x");
             # Observaciones
             $pdf->SetXY(36, 176);
-            $info["titular"]["declaracionesPF"]["observacionesFATCA"] ? $pdf->Write(50, $info["titular"]["declaracionesPF"]["observacionesFATCA"]) : ' ';
+            $info["personaRelacionada"][0]["persona"]["declaracionesPF"]["observacionesFATCA"] ? $pdf->Write(50, $info["personaRelacionada"]["declaracionesPF"]["observacionesFATCA"]) : ' ';
             # Documento
             $pdf->SetXY(44, 201);
-            $pdf->Write(30, $info["titular"]["datosPrincipalesFisicas"]["tipoID"]);
+            $pdf->Write(30, $info["personaRelacionada"][0]["persona"]["datosPrincipalesFisicas"]["tipoID"]);
             # Número
             $pdf->SetXY(70, 201);
-            $pdf->Write(30, $info["titular"]["datosPrincipalesFisicas"]["id"]);
+            $pdf->Write(30, $info["personaRelacionada"][0]["persona"]["datosPrincipalesFisicas"]["id"]);
             # Pais
             $pdf->SetXY(116, 200.5);
-            $pdf->Write(30, $info["titular"]["datosPersonales"]["paisResidencia"]);
+            $pdf->Write(30, $info["personaRelacionada"][0]["persona"]["datosPersonales"]["paisResidencia"]);
             # CUIT O CUIL
             $pdf->SetXY(45, 204);
-            $pdf->Write(30, $info["titular"]["datosFiscales"]["cuit"]);
+            $pdf->Write(30, $info["personaRelacionada"][0]["persona"]["datosFiscales"]["cuit"]);
         } else {
             $pdf->SetXY(79, 170);
             $pdf->Write(50, "s");
