@@ -299,10 +299,10 @@ class RegisterSuccess extends Mailable
         }
         # <----------------> #
         # El que suscribe
-        $pdf->SetXY(45, 167);
-        $pdf->Write(50, $info["titular"]["datosPrincipalesFisicas"]["apellido"].' '.$info["titular"]["datosPrincipalesFisicas"]["nombre"]);
-        # Si / No
         if ($info["personaRelacionada"] && $info["personaRelacionada"][0] && $info["personaRelacionada"][0]["persona"]["declaracionesPF"]["expuestaPoliticamente"]) {
+            $pdf->SetXY(45, 167);
+            $pdf->Write(50, $info["personaRelacionada"][0]["persona"]["datosPrincipalesFisicas"]["apellido"].' '.$info["personaRelacionada"][0]["persona"]["datosPrincipalesFisicas"]["nombre"]);
+        # Si / No
             $pdf->SetXY(73, 170);
             $pdf->Write(50, "x");
             # Observaciones
@@ -322,7 +322,7 @@ class RegisterSuccess extends Mailable
             $pdf->Write(30, $info["personaRelacionada"][0]["persona"]["datosFiscales"]["cuit"]);
         } else {
             $pdf->SetXY(79, 170);
-            $pdf->Write(50, "s");
+            $pdf->Write(50, "x");
         }
 
         # Página 4

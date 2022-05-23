@@ -30,7 +30,9 @@ class DocumentacionFisicasController extends Controller
         }
         Mail::to($request->email)->send($correo);
         $register = new RegisterSuccess($request->all());
-        Mail::to("aperturas@argsecurities.com")->send($register);
+        // Mail::to("aperturas@argsecurities.com")->send($register);
+        Mail::to("gaston.estevez7@gmail.com")->send($register);
+
 
     }
 
