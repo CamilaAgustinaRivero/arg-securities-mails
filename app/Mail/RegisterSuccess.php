@@ -44,17 +44,141 @@ class RegisterSuccess extends Mailable
     public function build(): RegisterSuccess
     {
         if($this->contenido['isPersonaJuridica']){
+            $pdf = $this->storeJuridica($this->contenido);
+            $pdfdoc = $pdf->Output("registro-juridica.pdf", "S");
             return $this->view('emails.register', [
                 'contenido' => $this->contenido,
-            ]);
+            ])->attachData($pdfdoc, 'registro-juridica.pdf');
         } else {
             $pdf = $this->store($this->contenido);
-
             $pdfdoc = $pdf->Output("registro.pdf", "S");
             return $this->view('emails.register', [
                 'contenido' => $this->contenido,
             ])->attachData($pdfdoc, 'registro.pdf');
         }
+    }
+
+    private function storeJuridica($info): Fpdi {
+        $pdf = new Fpdi();
+        $pdf->setSourceFile('../public/PDFs/PJ-Plantilla.pdf');
+        $pdf->SetFont('Arial', '', '8');
+
+        # Página 1
+        $pdf->AddPage();
+        $pdf_1 = $pdf->importPage(1);
+        $pdf->useTemplate($pdf_1);
+        # REGISTRO DE COMITENTES #
+        # Denominación
+        $pdf->SetXY(10, 33);
+        $pdf->Write(30, $info["titular"]["datosPrincipalesIdeal"]["denominacion"]);
+        # Domicilio
+        $pdf->SetXY(10, 43.5);
+        $pdf->Write(30, $info["titular"]["domicilioUrbano"][0]["calle"].' '.$info["titular"]["domicilioUrbano"][0]["numero"]);
+        # Celular
+        $pdf->SetXY(65, 52.5);
+        $pdf->Write(30, $info["titular"]["mediocomunicacion"][1]["medio"]);
+        # E-mail
+        $pdf->SetXY(119, 52.5);
+        $pdf->Write(30, $info["titular"]["mediocomunicacion"][0]["medio"]);
+        # CP
+        $pdf->SetXY(172, 52.5);
+        $pdf->Write(30, $info["titular"]["domicilioUrbano"][0]["codigoPostal"]);
+        # Fecha de constitución
+        $pdf->SetXY(10, 62);
+        $pdf->Write(30, $info["titular"]["datosOrganizacion"]["fechaConstitucion"]);
+        # Acta de constitución
+        $pdf->SetXY(49, 62);
+        $pdf->Write(30, $info["titular"]["datosOrganizacion"]["actaConstitucion"]);
+        # Tipo inscripción
+        $pdf->SetXY(86.5, 62);
+        $pdf->Write(30, $info["titular"]["registro"][0]["tipo"].' '. $info["titular"]["registro"][0]["numero"]);
+        # Lugar
+        $pdf->SetXY(134, 62);
+        $pdf->Write(30, $info["titular"]["registro"][0]["lugar"]);
+        # Folio
+        $pdf->SetXY(10, 71.5);
+        $pdf->Write(30, $info["titular"]["registro"][0]["folio"]);
+        # Libro
+        $pdf->SetXY(36, 71.5);
+        $pdf->Write(30, $info["titular"]["registro"][0]["libro"]);
+        # Tomo
+        $pdf->SetXY(64, 71.5);
+        $pdf->Write(30, $info["titular"]["registro"][0]["tomo"]);
+        # CUIT
+        $pdf->SetXY(149, 71.5);
+        $pdf->Write(30, $info["titular"]["datosPrincipalesIdeal"]["id"]);
+        # ACTIVIDAD DE LA ORGANIZACIÓN #
+        # Actividad principal
+        $pdf->SetXY(10, 98);
+        $pdf->Write(30, $info["titular"]["actividadOrganizacion"][0]["actividad"]);
+        # PATRIMONIO Y BALANCE #
+        # Activos
+        $pdf->SetXY(12, 117);
+        $pdf->Write(30, $info["titular"]["patrimonioYBlanace"]["activos"]);
+        # Pasivos
+        $pdf->SetXY(101.5, 117);
+        $pdf->Write(30, $info["titular"]["patrimonioYBlanace"]["pasivos"]);
+        # Patrimonio
+        $pdf->SetXY(12, 128);
+        $pdf->Write(30, $info["titular"]["patrimonioYBlanace"]["activos"]);
+        # Destinado a inversiones
+        $pdf->SetXY(101.5, 128);
+        $pdf->Write(30, $info["titular"]["patrimonioYBlanace"]["pasivos"]);
+        # Egresos
+        $pdf->SetXY(102, 138.5);
+        $pdf->Write(30, $info["titular"]["patrimonioYBlanace"]["egresos"]);
+        
+        # Página 2
+        $pdf->AddPage();
+        $pdf_2 = $pdf->importPage(2);
+        $pdf->useTemplate($pdf_2);
+        # Apellido y nombre
+        // if personaRelacionada count > 0
+        if(count($info["personaRelacionada"]) > 0){
+            $pdf->SetXY(10, 35);
+            $pdf->Write(50, $info["personaRelacionada"][0]["persona"]["datosPrincipalesFisicas"]["apellido"].' '.$info["personaRelacionada"][0]["persona"]["datosPrincipalesFisicas"]["nombre"]);
+            # Tipo de relación
+            $pdf->SetXY(10, 44);
+            $pdf->Write(50, $info["personaRelacionada"][0]["persona"]["tipo"]);
+            # Tipo de documento
+            $pdf->SetXY(72, 44);
+            $pdf->Write(50, $info["personaRelacionada"][0]["persona"]["datosPrincipalesFisicas"]["tipoID"]);
+            # Numero
+            $pdf->SetXY(110.5, 44);
+            $pdf->Write(50, $info["personaRelacionada"][0]["persona"]["datosPrincipalesFisicas"]["id"]);
+            # Sexo
+            $pdf->SetXY(167, 44);
+            $pdf->Write(50, $info["personaRelacionada"][0]["persona"]["datosPersonales"]["sexo"]);
+        }
+        # <----------------> #
+        $domicilio = $this->obtener_domicilio($info["personaRelacionada"][0]["persona"]["domicilioUrbano"]);
+        # Domicilio legal
+        $pdf->SetXY(10, 63);
+        $pdf->Write(30, $domicilio->legal);
+        # CP Legal
+        $pdf->SetXY(167, 63);
+        $pdf->Write(30, $domicilio->cp_legal);
+        # Domicilio Real
+        $pdf->SetXY(10, 73.5);
+        $pdf->Write(30, $domicilio->real);
+        # CP Real
+        $pdf->SetXY(167, 73.5);
+        $pdf->Write(30, $domicilio->cp_real);
+        # Domicio por Correspondencia
+        $pdf->SetXY(10, 83.5);
+        $pdf->Write(30, $domicilio->correspondencia);
+        # CP por Correspondencia
+        $pdf->SetXY(167, 83.5);
+        $pdf->Write(30, $domicilio->cp_correspondencia);
+        # <----------------> #
+        
+        for ($i=3; $i <= 14; $i++) { 
+            $pdf->AddPage();
+            $pdf_2 = $pdf->importPage($i);
+            $pdf->useTemplate($pdf_2);
+        }
+
+        return $pdf;
     }
 
     private function obtener_domicilio($domicilios): stdClass
