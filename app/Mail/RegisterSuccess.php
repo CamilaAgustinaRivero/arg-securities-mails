@@ -61,6 +61,7 @@ class RegisterSuccess extends Mailable
     private function storeJuridica($info): Fpdi {
         $pdf = new Fpdi();
         $pdf->setSourceFile(base_path() . '/public/PDFs/PJ-Plantilla.pdf');
+
         $pdf->SetFont('Arial', '', '8');
 
         # Página 1
@@ -171,12 +172,264 @@ class RegisterSuccess extends Mailable
         $pdf->SetXY(167, 83.5);
         $pdf->Write(30, $domicilio->cp_correspondencia);
         # <----------------> #
-        
-        for ($i=3; $i <= 14; $i++) { 
-            $pdf->AddPage();
-            $pdf_2 = $pdf->importPage($i);
-            $pdf->useTemplate($pdf_2);
+        # Celular
+            $pdf->SetXY(75, 99);
+            $pdf->Write(30, $info["personaRelacionada"][0]["persona"]["mediocomunicacion"][1]["medio"]);
+            # E-mail
+            $pdf->SetXY(136, 99);
+            $pdf->Write(30, $info["personaRelacionada"][0]["persona"]["mediocomunicacion"][0]["medio"]);
+            # Estado civil
+            $pdf->SetXY(18, 111.5);
+            $pdf->Write(30, $info["personaRelacionada"][0]["persona"]["datosPersonales"]["estadoCivil"]);
+            # Cónyuge
+            $pdf->SetXY(75, 111.5);
+            $info["personaRelacionada"][0]["persona"]["datosConyuge"] ? $pdf->Write(30, $info["personaRelacionada"][0]["persona"]["datosConyuge"][0]["apellido"].' '.$info["personaRelacionada"][0]["persona"]["datosConyuge"][0]["nombre"]) : ' ';
+            # Documento cónyuge
+            $pdf->SetXY(18, 124);
+            $info["personaRelacionada"][0]["persona"]["datosConyuge"] ? $pdf->Write(30, $info["personaRelacionada"][0]["persona"]["datosConyuge"][0]["tipoID"]) : ' ';
+            # CUIT O CUIL cónyuge
+            $pdf->SetXY(75, 124);
+            $info["personaRelacionada"][0]["persona"]["datosConyuge"] ? $pdf->Write(30, $info["personaRelacionada"][0]["persona"]["datosConyuge"][0]["id"]) : ' ';
+            # Fecha de nacimiento
+            $pdf->SetXY(18, 137.5);
+            $pdf->Write(30, $info["personaRelacionada"][0]["persona"]["datosPersonales"]["fechaNacimiento"]);
+            # Nacionalidad
+            $pdf->SetXY(75, 137.5);
+            $pdf->Write(30, $info["personaRelacionada"][0]["persona"]["datosPersonales"]["nacionalidad"]);
+            # Residencia
+            $pdf->SetXY(136, 137.5);
+            $pdf->Write(30, $info["personaRelacionada"][0]["persona"]["datosPersonales"]["paisResidencia"]);
+            # Actividad
+            $pdf->SetXY(18, 150);
+            $pdf->Write(30, $info["personaRelacionada"][0]["persona"]["datosPersonales"]["actividad"]);
+            # CUIT O CUIL
+            $pdf->SetXY(136, 150);
+            $pdf->Write(30, $info["personaRelacionada"][0]["persona"]["datosFiscales"]["cuit"]);
+            # Impuesto IVA
+            $pdf->SetXY(18, 163);
+            $pdf->Write(30, $info["personaRelacionada"][0]["persona"]["datosFiscales"]["tipoResponsableIVA"]);
+            # Impuesto ganancias
+            $pdf->SetXY(75, 163);
+            $pdf->Write(30, $info["personaRelacionada"][0]["persona"]["datosFiscales"]["tipoResponsableGanancias"]);
+
+
+        # Página 3
+        $pdf->AddPage();
+        $pdf_3 = $pdf->importPage(3);
+        $pdf->useTemplate($pdf_3);
+        $pdf->SetFont('Arial', '', '7');
+        # El que suscribe
+        $pdf->SetXY(45, 42);
+        $pdf->Write(50, $info["titular"]["datosPrincipalesFisicas"]["apellido"].' '.$info["titular"]["datosPrincipalesFisicas"]["nombre"]);
+        # Si / No
+        if ($info["titular"]["declaracionesPF"]["expuestaPoliticamente"]) {
+            $pdf->SetXY(73, 45);
+            $pdf->Write(50, "x");
+            # Observaciones
+            $pdf->SetXY(36, 51);
+            $info["titular"]["declaracionesPF"]["observacionesFATCA"] ? $pdf->Write(50, $info["titular"]["declaracionesPF"]["observacionesFATCA"]) : ' ';
+            # Documento
+            $pdf->SetXY(44, 76);
+            $pdf->Write(30, $info["titular"]["datosPrincipalesFisicas"]["tipoID"]);
+            # Número
+            $pdf->SetXY(70, 76);
+            $pdf->Write(30, $info["titular"]["datosPrincipalesFisicas"]["id"]);
+            # Pais
+            $pdf->SetXY(116, 75.5);
+            $pdf->Write(30, $info["titular"]["datosPersonales"]["paisResidencia"]);
+            # CUIT O CUIL
+            $pdf->SetXY(45, 79);
+            $pdf->Write(30, $info["titular"]["datosFiscales"]["cuit"]);
+        } else {
+            $pdf->SetXY(79, 45);
+            $pdf->Write(50, "x");
         }
+        # <----------------> #
+        # El que suscribe
+        $pdf->SetXY(45, 167);
+        $pdf->Write(50, $info["titular"]["datosPrincipalesFisicas"]["apellido"].' '.$info["titular"]["datosPrincipalesFisicas"]["nombre"]);
+        # Si / No
+        if ($info["titular"]["declaracionesPF"]["expuestaPoliticamente"]) {
+            $pdf->SetXY(73, 170);
+            $pdf->Write(50, "x");
+            # Observaciones
+            $pdf->SetXY(36, 176);
+            $info["titular"]["declaracionesPF"]["observacionesFATCA"] ? $pdf->Write(50, $info["titular"]["declaracionesPF"]["observacionesFATCA"]) : ' ';
+            # Documento
+            $pdf->SetXY(44, 201);
+            $pdf->Write(30, $info["titular"]["datosPrincipalesFisicas"]["tipoID"]);
+            # Número
+            $pdf->SetXY(70, 201);
+            $pdf->Write(30, $info["titular"]["datosPrincipalesFisicas"]["id"]);
+            # Pais
+            $pdf->SetXY(116, 200.5);
+            $pdf->Write(30, $info["titular"]["datosPersonales"]["paisResidencia"]);
+            # CUIT O CUIL
+            $pdf->SetXY(45, 204);
+            $pdf->Write(30, $info["titular"]["datosFiscales"]["cuit"]);
+        } else {
+            $pdf->SetXY(79, 170);
+            $pdf->Write(50, "x");
+        }
+
+        # Página 4
+        $pdf->AddPage();
+        $pdf_2 = $pdf->importPage(4);
+        $pdf->useTemplate($pdf_2);
+        $pdf->SetFont('Arial', '', '7');
+        # <----------------> #
+        # Nombre del sujeto obligado
+        $pdf->SetXY(108, 65);
+        $pdf->Write(50, $info["titular"]["datosPrincipalesFisicas"]["apellido"].' '.$info["titular"]["datosPrincipalesFisicas"]["nombre"]);
+        # Es sujeto obligado?
+        if ($info["titular"]["declaracionesPF"]["personaEEUU"]) {
+            # Check SI ES SUJETO OBLIGADO
+            $pdf->SetXY(20.1, 84.5);
+            $pdf->Write(30, 'x');
+            # Apellido y nombre
+            $pdf->SetXY(42, 125);
+            $pdf->Write(30, $info["titular"]["datosPrincipalesFisicas"]["apellido"].' '.$info["titular"]["datosPrincipalesFisicas"]["nombre"]);
+            # CUIL
+            $pdf->SetXY(44, 129);
+            $pdf->Write(30, $info["titular"]["datosFiscales"]["cuit"]);
+            # Documento
+            $pdf->SetXY(33, 132);
+            $pdf->Write(30, $info["titular"]["datosPrincipalesFisicas"]["tipoID"]);
+            # Número
+            $pdf->SetXY(55, 132);
+            $pdf->Write(30, $info["titular"]["datosPrincipalesFisicas"]["id"]);
+            # Número de inscripción
+            $pdf->SetXY(68.7, 137.5);
+            $pdf->Write(30, $info["titular"]["declaracionesPF"]["numeroInscripcion"]);
+        } else {
+            # Check NO ES SUJETO OBLIGADO
+            $pdf->SetXY(26, 84.5);
+            $pdf->Write(30, 'x');
+        }
+
+        # Página 5
+        $pdf->AddPage();
+        $pdf_2 = $pdf->importPage(5);
+        $pdf->useTemplate($pdf_2);
+        $pdf->SetFont('Arial', '', '7');
+        # <----------------> #
+        # Nombre del sujeto obligado
+        if($info["personaRelacionada"][0] && $info["personaRelacionada"][0]["persona"]){
+            $pdf->SetXY(108, 60.0);
+            $pdf->Write(50, $info["personaRelacionada"][0]['persona']["datosPrincipalesFisicas"]["apellido"].' '.$info["personaRelacionada"][0]['persona']["datosPrincipalesFisicas"]["nombre"]);
+            # Es sujeto obligado?
+            if($info["personaRelacionada"][0]['persona']["declaracionesPF"]["personaEEUU"]) {
+                # Check SI ES SUJETO OBLIGADO
+                $pdf->SetXY(20.5, 82);
+                $pdf->Write(30, 'x');
+                # Apellido y nombre
+                $pdf->SetXY(42, 123);
+                $pdf->Write(30, $info["personaRelacionada"][0]['persona']["datosPrincipalesFisicas"]["apellido"].' '.$info["personaRelacionada"][0]['persona']["datosPrincipalesFisicas"]["nombre"]);
+                # CUIL
+                $pdf->SetXY(44, 126.5);
+                $pdf->Write(30, $info["personaRelacionada"][0]['persona']["datosFiscales"]["cuit"]);
+                # Documento
+                $pdf->SetXY(33, 129.5);
+                $pdf->Write(30, $info["personaRelacionada"][0]['persona']["datosPrincipalesFisicas"]["tipoID"]);
+                # Número
+                $pdf->SetXY(55, 129.5);
+                $pdf->Write(30, $info["personaRelacionada"][0]['persona']["datosPrincipalesFisicas"]["id"]);
+                # Numero de inscripción
+                $pdf->SetXY(68.7, 135.5);
+                $pdf->Write(30, $info["personaRelacionada"][0]['persona']["declaracionesPF"]["numeroInscripcion"]);
+            } else {
+                # Check NO ES SUJETO OBLIGADO
+                $pdf->SetXY(26, 82);
+                $pdf->Write(30, 'x');
+            }
+        }
+
+        # Página 6
+        $pdf->AddPage();
+        $pdf_6 = $pdf->importPage(6);
+        $pdf->useTemplate($pdf_6);
+        $pdf->SetFont('Arial', '', '8');
+        # Apellido y nombre
+        $pdf->SetXY(18, 38);
+        $pdf->Write(50, $info["titular"]["datosPrincipalesFisicas"]["apellido"].' '.$info["titular"]["datosPrincipalesFisicas"]["nombre"]);
+        # Tipo y actividad principal
+        $pdf->SetXY(18, 46);
+        $pdf->Write(50, $info["titular"]["actividadPersona"][0]["actividad"]);
+        # Rubro
+        $pdf->SetXY(18, 54);
+        $pdf->Write(50, $info["titular"]["actividadPersona"][0]["rubro"]);
+        # Procedencia de ingresos
+        $pdf->SetXY(18, 70);
+        $pdf->Write(50, $info["titular"]["infoPatrimonial"][0]["procedenciaFondos"][0]);
+        # Ingreso anual
+        $pdf->SetXY(18, 78);
+        $pdf->Write(50, $info["titular"]["infoPatrimonial"][0]["ingresos"]);
+        # Pratrimonio neto
+        $pdf->SetXY(110, 78);
+        $pdf->Write(50, $info["titular"]["infoPatrimonial"][0]["patrimonio"]);
+
+        # Páginas 7 a 13
+        for ($i=7; $i <= 13 ; $i++) {
+            $pdf->AddPage();
+            $pdf_i = $pdf->importPage($i);
+            $pdf->useTemplate($pdf_i);
+        }
+
+        # Página 14
+        $pdf->AddPage();
+        $pdf_14 = $pdf->importPage(14);
+        $pdf->useTemplate($pdf_14);
+
+        # Denominación
+        $pdf->SetXY(103, 82);
+        $pdf->Write(30, $info["titular"]["cuentaBancaria"][0]["denominacion"]);
+        # Tipo de cuenta
+        $pdf->SetXY(103, 85.5);
+        $pdf->Write(30, $info["titular"]["cuentaBancaria"][0]["tipo"]);
+        # Número de cuenta
+        $pdf->SetXY(103, 89);
+        $pdf->Write(30, $info["titular"]["cuentaBancaria"][0]["numero"]);
+        # Titular
+        $pdf->SetXY(103, 82.5);
+        $pdf->Write(50, $info["titular"]["datosPrincipalesFisicas"]["apellido"].' '.$info["titular"]["datosPrincipalesFisicas"]["nombre"]);
+        # CUIT
+        $pdf->SetXY(103, 96);
+        $pdf->Write(30, $info["titular"]["datosFiscales"]["cuit"]);
+        # CBU
+        $pdf->SetXY(103, 100);
+        $pdf->Write(30, $info["titular"]["cuentaBancaria"][0]["cbu"]);
+        # Alias
+        $pdf->SetXY(103, 104);
+        $pdf->Write(30, $info["titular"]["cuentaBancaria"][0]["alias"]);
+
+        if(isset($info["titular"]["cuentaBancaria"][1])){
+            # Denominación
+            $pdf->SetXY(103, 112);
+            $pdf->Write(30, $info["titular"]["cuentaBancaria"][1]["denominacion"]);
+            # Tipo de cuenta
+            $pdf->SetXY(103, 116);
+            $pdf->Write(30, $info["titular"]["cuentaBancaria"][1]["tipo"]);
+            # Número de cuenta
+            $pdf->SetXY(103, 120);
+            $pdf->Write(30, $info["titular"]["cuentaBancaria"][1]["numero"]);
+            # Titular
+            $pdf->SetXY(103, 114);
+            $pdf->Write(50, $info["titular"]["datosPrincipalesFisicas"]["apellido"].' '.$info["titular"]["datosPrincipalesFisicas"]["nombre"]);
+            # CUIT
+            $pdf->SetXY(103, 127.5);
+            $pdf->Write(30, $info["titular"]["datosFiscales"]["cuit"]);
+            # CBU
+            $pdf->SetXY(103, 131);
+            $pdf->Write(30, $info["titular"]["cuentaBancaria"][1]["cbu"]);
+            # Alias
+            $pdf->SetXY(103, 134.5);
+            $pdf->Write(30, $info["titular"]["cuentaBancaria"][1]["alias"]);
+        }
+
+        # Página 15
+        $pdf->AddPage();
+        $pdf_15 = $pdf->importPage(15);
+        $pdf->useTemplate($pdf_15);
 
         return $pdf;
     }
