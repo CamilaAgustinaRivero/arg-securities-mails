@@ -11,7 +11,7 @@ class PersonaFisica extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $subject = "PERSONA FÍSICA | Envío de documentación";
+    public $subject = "Muchas gracias por contactarse con ARG Securities Advisors S.A.";
     public $contenido;
 
     /**
@@ -31,12 +31,13 @@ class PersonaFisica extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.personaFisica')
-        ->attach($this->contenido['file']->getRealPath(), [
-            'as'=>$this->contenido['file']->getClientOriginalName()
-        ])
-        ->attach($this->contenido['file2']->getRealPath(), [
-            'as'=>$this->contenido['file2']->getClientOriginalName()
-        ]);;
+        return $this->view('emails.clientTemplate');
+        // return $this->view('emails.personaFisica');
+        // ->attach($this->contenido['dniFrenteDorso']->getRealPath(), [
+        //     'as'=>$this->contenido['dniFrenteDorso']->getClientOriginalName()
+        // ])
+        // ->attach($this->contenido['constanciaOrigenDeFondos']->getRealPath(), [
+        //     'as'=>$this->contenido['constanciaOrigenDeFondos']->getClientOriginalName()
+        // ]);;
     }
 }
